@@ -8,5 +8,8 @@ grid.style.width= "25px";
 grid.style.border= "2px white solid";
 grid.style.boxSizing="border-box"
 container.append(grid);
+grid.addEventListener('mouseenter',()=>{grid.style.backgroundColor="black"});
 console.log("a grid is created")
 }
+
+

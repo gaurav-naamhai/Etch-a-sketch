@@ -62,3 +62,31 @@ Use `box-sizing: border-box`. This makes the border included inside the element'
 | Grid squares too small / uneven | Hardcoded `width: 20px` | Calculate: container width ÷ columns per row (400 ÷ 16 = 25px) |
 
 ### PHASE 2 
+# Phase 2 — Hover Effect & Pen Trail
+
+## Mouse Events Used
+
+| Event | What it does |
+|-------|-------------|
+| `mouseenter` | Fires when mouse enters the element |
+| `mouseleave` | Fires when mouse leaves the element |
+| `mouseover` | Fires when mouse moves over element or any child inside it |
+
+---
+
+## Pen Trail Logic
+
+For a permanent trail (colour stays after hover), you only need `mouseenter`. `mouseleave` reverts the colour — removing it makes the change stick.
+
+```javascript
+grid.addEventListener('mouseenter', () => { grid.style.backgroundColor = "black"; });
+```
+
+---
+
+## Bugs Hit During Phase 2
+
+| Bug | Cause | Fix |
+|-----|-------|-----|
+| Event listener only on last grid | `addEventListener` was outside the `for` loop — `grid` out of scope | Move both lines inside the loop |
+| Got confused and overcomplicated it | Added `mouseleave` + `mouseover` on top of working code | It already worked — `mouseleave` was the only thing undoing the trail. Remove it. |
