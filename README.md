@@ -90,3 +90,81 @@ grid.addEventListener('mouseenter', () => { grid.style.backgroundColor = "black"
 |-----|-------|-----|
 | Event listener only on last grid | `addEventListener` was outside the `for` loop — `grid` out of scope | Move both lines inside the loop |
 | Got confused and overcomplicated it | Added `mouseleave` + `mouseover` on top of working code | It already worked — `mouseleave` was the only thing undoing the trail. Remove it. |
+
+
+
+## PHASE 3
+# Phase 3 — Dynamic Grid Size
+
+## Goal
+Let the user input a number `y`, then generate a `y x y` grid that fills the container perfectly.
+
+## Final Working Code
+
+```javascript
+const container = document.querySelector('.container');
+let y = prompt("Enter the no of grids you want each side?")
+const x = y * y;
+for (i = 0; i < x; i++) {
+  const grid = document.createElement("div");
+  grid.style.margin = "0px";
+  grid.style.backgroundColor = "yellow";
+  grid.style.height = `${400/y}px`;
+  grid.style.width = `${400/y}px`;
+  grid.style.border = "2px white solid";
+  grid.style.boxSizing = "border-box";
+  container.append(grid);
+  grid.addEventListener('mouseenter', () => { grid.style.backgroundColor = "black"; });
+}
+```
+
+---
+
+## Doubts Solved
+
+### 1. How to set a hover effect in JS
+
+Use `addEventListener` with `mouseenter` and `mouseleave` events on each element.
+
+```javascript
+grid.addEventListener('mouseenter', () => { grid.style.backgroundColor = "black"; });
+grid.addEventListener('mouseleave', () => { grid.style.backgroundColor = "yellow"; });
+```
+
+For a **permanent trail** (no revert), only use `mouseenter` — drop `mouseleave`.
+
+---
+
+### 2. How to make grid size dynamic based on user input
+
+Calculate grid cell size as `containerWidth / y` instead of hardcoding it.
+
+```javascript
+grid.style.width = `${400 / y}px`;
+grid.style.height = `${400 / y}px`;
+```
+
+---
+
+### 3. How to embed expressions inside strings in JS (Template Literals)
+
+Use backticks `` ` `` with `${}` syntax — JS evaluates the expression inside `${}`.
+
+```javascript
+// Wrong — JS treats this as a plain string, no math happens
+grid.style.width = "(400/y)px";
+grid.style.width = `{400/y}px`;   // also wrong — missing $
+
+// Correct
+grid.style.width = `${400 / y}px`;
+```
+
+---
+
+## Bugs Hit During Phase 3
+
+| Bug | Cause | Fix |
+|-----|-------|-----|
+| Grid not wrapping after `y` columns | Cell width was hardcoded at 25px — 16 always fit per row regardless of input | Calculate width as `400/y` |
+| Math not evaluating in style assignment | Used a regular string `"(400/y)px"` — JS doesn't evaluate expressions in quotes | Use template literal: `` `${400/y}px` `` |
+| Template literal not working | Wrote `` `{400/y}px` `` — missing `$` before `{}` | `` `${400/y}px` `` |
