@@ -168,3 +168,90 @@ grid.style.width = `${400 / y}px`;
 | Grid not wrapping after `y` columns | Cell width was hardcoded at 25px — 16 always fit per row regardless of input | Calculate width as `400/y` |
 | Math not evaluating in style assignment | Used a regular string `"(400/y)px"` — JS doesn't evaluate expressions in quotes | Use template literal: `` `${400/y}px` `` |
 | Template literal not working | Wrote `` `{400/y}px` `` — missing `$` before `{}` | `` `${400/y}px` `` |
+
+---
+
+## PHASE 4
+# Phase 4 — Button-Triggered Dynamic Grid
+
+## Goal
+Move the prompt inside a button click so the grid regenerates on demand instead of firing on page load.
+
+## Final Working Code
+
+```javascript
+const container = document.querySelector('.container');
+const butt = document.querySelector('.butt');
+const btn = document.createElement('button');
+btn.innerText = 'New';
+butt.appendChild(btn);
+
+btn.addEventListener("click", () => {
+  const y = parseInt(prompt("Enter the no of grids you want each side?"));
+
+  if (!y || y <= 0) return;
+
+  container.innerHTML = '';
+
+  const x = y * y;
+  for (let i = 0; i < x; i++) {
+    const grid = document.createElement("div");
+    grid.style.margin = "0px";
+    grid.style.backgroundColor = "yellow";
+    grid.style.height = `${400 / y}px`;
+    grid.style.width = `${400 / y}px`;
+    grid.style.border = "2px white solid";
+    grid.style.boxSizing = "border-box";
+    container.append(grid);
+    grid.addEventListener('mouseenter', () => { grid.style.backgroundColor = "black"; });
+  }
+});
+```
+
+---
+
+## Doubts Solved
+
+### 1. How to create a button with JS
+
+Use `document.createElement('button')`, set its text with `innerText`, then append it to an existing element.
+
+```javascript
+const btn = document.createElement('button');
+btn.innerText = 'Click Me';
+document.querySelector('.butt').appendChild(btn);
+```
+
+---
+
+### 2. How to use a prompt value outside the click callback
+
+You can't — `let`/`const` declared inside a callback are scoped to that callback only. The fix is to move all code that depends on that value **inside** the same callback.
+
+```javascript
+// WRONG — y is declared inside the callback, loop is outside
+btn.addEventListener("click", () => {
+  const y = parseInt(prompt("Enter grid size"));
+}); // y dies here
+
+for (let i = 0; i < y * y; i++) { ... } // y is undefined here — ReferenceError
+
+// CORRECT — everything that uses y lives inside the callback
+btn.addEventListener("click", () => {
+  const y = parseInt(prompt("Enter grid size"));
+  for (let i = 0; i < y * y; i++) { ... } // y is alive here
+});
+```
+
+**Why:** JavaScript uses lexical scoping. A variable declared with `let` or `const` inside `{}` only exists within those braces. Once the closing `}` of the callback is hit, `y` is gone.
+
+---
+
+## Bugs Hit During Phase 4
+
+| Bug | Cause | Fix |
+|-----|-------|-----|
+| `y is not defined` ReferenceError | `y` declared inside click callback with `const`, loop was outside the callback | Move entire loop inside the callback |
+| Old grids staying when new grid generated | `container` not cleared before appending new grids | Add `container.innerHTML = ''` before the loop |
+| `y * y` returning `NaN` | `prompt()` returns a string — string math breaks | Wrap with `parseInt()` |
+| `i` leaking as global variable | `for (i = 0; ...)` — no `let`/`const` declaration | Use `for (let i = 0; ...)` |

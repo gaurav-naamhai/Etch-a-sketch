@@ -1,5 +1,11 @@
 const container = document.querySelector('.container');
-let y = prompt("Enter the no of grids you want each side?")
+const butt = document.querySelector('.butt');
+const btn=document.createElement('button');
+btn.innerText='New';
+butt.appendChild(btn)
+btn.addEventListener("click",()=>{const y=parseInt(prompt("Enter the no of grids you want each side?"))
+
+
 const x=y*y;
 for(i=0;i<x;i++){
 const grid = document.createElement("div");
@@ -14,5 +20,4 @@ container.append(grid);
 grid.addEventListener('mouseenter',()=>{grid.style.backgroundColor="black"});
 console.log("a grid is created");
  } 
-
-
+});
