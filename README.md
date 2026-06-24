@@ -1,6 +1,6 @@
 #Etch a sketch
 # Grid Project — Doubts & Answers
-
+### PHASE 1
 ## 1. How to select a class in JS from HTML
 
 Use `document.querySelector('.classname')` for a single element.
@@ -60,3 +60,5 @@ Use `box-sizing: border-box`. This makes the border included inside the element'
 | `color` not coloring the box | `color` applies to text only | Use `backgroundColor` |
 | Grids stacking vertically, not in a grid | `div` is block-level by default | `display: flex` + `flex-wrap: wrap` on container |
 | Grid squares too small / uneven | Hardcoded `width: 20px` | Calculate: container width ÷ columns per row (400 ÷ 16 = 25px) |
+
+### PHASE 2 
